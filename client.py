@@ -14,15 +14,18 @@ else:
 	port = sys.argv[4]
 	size = sys.argv[6]
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((host,port))
+#	s.connect((host,port))
 	checkpoint = 1
-	print("[Checkpoint " + str(checkpoint.zfill(2) + "] Connection to " + str(host) + " on port " + str(port)) 
+	print("[Checkpoint " + str(checkpoint).zfill(2) + "] Connection to " + str(host) + " on port " + str(port)) 
 	checkpoint += 1
 	while 1:
-		print("[Checkpoint " + str(checkpoint.zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
 		checkpoint += 1
 		
-		s.send()
-		data = s.recv(size)
-		s.close()
-		print ('Received:', data)
+
+
+		break #delete after you get qrcode working		
+		#s.send()
+		#data = s.recv(size)
+		#s.close()
+		#print ('Received:', data)
