@@ -37,7 +37,27 @@ else:
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received data:  " + str(data))
 		checkpoint += 1
 		unpickled = pickle.loads(data)
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(unpickled[0]))		
+		key = unpickled[0]
+		question = unpickled[1]
+		hash = unpickled[2]
+		actQuestion = key.decrypt(question)
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
+		checkpoint += 1
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + str(actQuestion))
+		checkpoint += 1
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + str(actQuestion))
+		checkpoint += 1
+		response = wolfClient.query(actQuestion)		
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
+		checkpoint += 1
+		token = key.decrypt(response)
+		
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
+		checkpoint += 1
+		
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: ")
+		checkpoint += 1
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: ")
 		if data:
 			client.send(data)
 		client.close()
