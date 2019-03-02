@@ -3,6 +3,8 @@ import sys
 import wolframalpha
 from cryptography.fernet import Fernet
 import ServerKeys 
+import pickle
+
 
 def fetch_ip():
       return((([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close())\
@@ -34,7 +36,8 @@ else:
 		data = client.recv(size)
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received data:  " + str(data))
 		checkpoint += 1
-		print (b'Received : ' + data)
+		unpickled = pickle.loads(data)
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(unpickled[0]))		
 		if data:
 			client.send(data)
 		client.close()
