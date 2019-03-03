@@ -4,7 +4,8 @@ import wolframalpha
 from cryptography.fernet import Fernet
 import ServerKeys 
 import pickle
-
+from pygame import mixer
+import hashlib
 
 def fetch_ip():
       return((([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close())\
@@ -39,8 +40,9 @@ else:
 		unpickled = pickle.loads(data)
 		key = unpickled[0]
 		question = unpickled[1]
-		hash = unpickled[2]
-		actQuestion = key.decrypt(question)
+		md5hash = unpickled[2]
+                f = Fernet(key)
+		actQuestion = f.decrypt(question)
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
 		checkpoint += 1
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + str(actQuestion))
@@ -50,8 +52,25 @@ else:
 		response = wolfClient.query(actQuestion)		
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
 		checkpoint += 1
-		token = key.decrypt(response)
-		
+		encryptedResponse = f.encrypt(response)
+	        text_to_speech = ServerKeys.returnTextToSpeech()
+                with open('Answer.wav', 'wb') as audio_file:
+                    audio_file.write(
+                        text_to_speech.synthesize(
+                            str(response)
+                            'audio/wav'
+                            'en-US_AllisonVoice'
+                        ).get_result().content)
+                
+                mixer.init()
+                mixer.music.load("Answer.wav")
+                mixer.music.play()
+
+                h = hashlib.md5()
+                h.update(encryptedResponse)
+                newMD5Sum = h.hexdigest()
+                token = (encryptedResponse, newMD5Sum)
+
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
 		checkpoint += 1
 		
