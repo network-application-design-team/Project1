@@ -10,14 +10,19 @@ from cryptography.fernet import Fernet as frt
 import hashlib
 import ClientKeys
 from pygame import mixer
+#import netaddr 
 
 if len(sys.argv) != 7:
 	print("Not enough argument in the commandline")
 	sys.exit[1]
 else:
 	host = sys.argv[2]
-	port = sys.argv[4]
-	size = sys.argv[6]
+#	host = '172.30.111.201'		
+#	host = int(netaddr.IPAddress(host))
+	print(host)
+	print(type(host))
+	port = int(sys.argv[4])
+	size = int(sys.argv[6])
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((host,port))
 	checkpoint = 1
