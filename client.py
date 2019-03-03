@@ -44,8 +44,8 @@ else:
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
 		checkpoint += 1
 		
-                while 1:
-                        try:
+		while 1:
+			try:
                             # Start of code for QR scanner
                             # Initialize the camera and have it take a picture
 				camera=PiCamera()
@@ -62,8 +62,8 @@ else:
 				break;
 			except:
 				print("Error, picture taken is not a QR code, Retrying now")
-                                Question = 'What is today?'
-                                break;
+				Question = 'What is today?'
+				break;
         
 
 		#delete after you get qrcode working		
