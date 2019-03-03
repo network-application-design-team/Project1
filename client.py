@@ -3,8 +3,15 @@
 """
 A simple echo client
 """
+# Imports for QR scanner
 from __future__ import print_function
+from picamera import PiCamera
+from time import sleep
+import pyzbar.pyzbar as pyzbar
+import numpy as np
+import cv2
 
+# Imports for rest of client
 import sys
 import socket
 import pickle
@@ -15,13 +22,7 @@ from pygame import mixer
 import datetime
 #import netaddr 
 
-# Imports for QR scanner
 
-from picamera import PiCamera
-from time import sleep
-import pyzbar.pyzbar as pyzbar
-import numpy as np
-import cv2
 
 if len(sys.argv) != 7:
 	print("Not enough argument in the commandline")
