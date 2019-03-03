@@ -102,15 +102,17 @@ else:
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Answer: " + str(answer))
 		checkpoint += 1
 		text_to_speech = ClientKeys.returnTextToSpeech()
-		with open('Answer.wav', 'wb') as audio_file:
+		with open('Question.mp3', 'wb') as audio_file:
 			audio_file.write(
 				text_to_speech.synthesize(
 					str(answer),
-					'audio/wav',
+					'audio/mp3',
 					'en-US_AllisonVoice'
 				).get_result().content)
 
 		mixer.init()
-		mixer.music.load("Answer.wav")
+		mixer.music.load("Question.mp3")
 		mixer.music.play()
+		while mixer.music.get_busy():
+			sleep(1)
 

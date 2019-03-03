@@ -1,3 +1,4 @@
+import pdb
 import socket
 import sys
 import wolframalpha
@@ -6,6 +7,8 @@ import ServerKeys
 import pickle
 import watson_developer_cloud
 import datetime
+import json
+import time
 
 from pygame import mixer
 import hashlib
@@ -49,50 +52,54 @@ else:
 		f = Fernet(key)
 		actQuestion = f.decrypt(question)
 
-		stringQuestion = str(actQuestion).decode('utf-8')
 		
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + stringQuestion)		
+		strQuestion = str(actQuestion, 'utf-8')
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + strQuestion)		
 		checkpoint += 1
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + stringQuestion)
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + strQuestion)
 		checkpoint += 1
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + stringQuestion)
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + strQuestion)
 
-
 		checkpoint += 1
-		response = wolfClient.query(stringQuestion)		
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
+		wolframResponse = wolfClient.query(strQuestion)
+		stringResponse = next(wolframResponse.results).text
+		response = bytes(stringResponse, 'utf-8')
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(stringResponse)) 
 		checkpoint += 1
-
+#		print(str(type(stringResponse)) + "Response: " + str(stringResponse))
+		
 		
 	
 
 		encryptedResponse = f.encrypt(response)
 		text_to_speech = ServerKeys.returnTextToSpeech()
-		with open('Answer.wav', 'wb') as audio_file:
+		with open('Answer.mp3', 'wb') as audio_file:
 			audio_file.write(
 				text_to_speech.synthesize(
 					str(response),
-					'audio/wav',
+					'audio/mp3',
 					'en-US_AllisonVoice'
 				).get_result().content)
                 
 		mixer.init()
-		mixer.music.load("Answer.wav")
+		mixer.music.load("Answer.mp3")
 		mixer.music.play()
-		
+	
+		while mixer.music.get_busy():
+			time.sleep(1)
 		h = hashlib.md5()
 		h.update(encryptedResponse)
 		newMD5Sum = h.hexdigest()
 		token = (encryptedResponse, newMD5Sum)
 
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + str(key) + " | Ciphertext: " + str(token))
 		checkpoint += 1
 		
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: " + str(newMD5Sum))
 		checkpoint += 1
 		
 		pickleAns = pickle.dumps(token)
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: " + pickleAns)
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: " + str(pickleAns))
 		
 		client.send(pickleAns)
 
