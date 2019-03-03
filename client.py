@@ -61,18 +61,10 @@ else:
 				Question=decodedObject[0].data
 				break;
 			except:
-				print("["+str(datetime.now())  + "] [Error, picture taken is not a QR code, Retrying now]")
-				Question = 'What is the meaning of life?'
-				break;
+				print("["+str(datetime.datetime.now())  + "] [Error, picture taken is not a QR code, Retrying now]")
         
 
-		#delete after you get qrcode working		
-		#s.send()
-		#data = s.recv(size)
-		#s.close()
-		#print ('Received:', data)
-		#Question = 'What is today?'
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question,'utf-8'))
 		checkpoint += 1
 		key = frt.generate_key()
 		f = frt(key)
@@ -99,19 +91,19 @@ else:
 		answer = f.decrypt(encryptedAnswer[0])
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Using Key: " + str(key) + " | Plain text: " + str(answer))
 		checkpoint += 1
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Answer: " + str(answer))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Answer: " + str(answer,'utf-8'))
 		checkpoint += 1
 		text_to_speech = ClientKeys.returnTextToSpeech()
-		with open('Question.mp3', 'wb') as audio_file:
+		with open('Answer.mp3', 'wb') as audio_file:
 			audio_file.write(
 				text_to_speech.synthesize(
-					str(answer),
+					str(answer,'utf-8'),
 					'audio/mp3',
 					'en-US_AllisonVoice'
 				).get_result().content)
 
 		mixer.init()
-		mixer.music.load("Question.mp3")
+		mixer.music.load("Answer.mp3")
 		mixer.music.play()
 		while mixer.music.get_busy():
 			sleep(1)
