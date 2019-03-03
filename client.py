@@ -40,23 +40,24 @@ else:
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
 		checkpoint += 1
 		
-                # Start of code for QR scanner
-                # Initialize the camera and have it take a picture
-                camera=PiCamera()
-                camera.start_preview()
-                sleep(5)
-                camera.capture('/home/pi/projects/Project1/qr_image.jpg')
-                camera.stop_preview()
-                camera.close()
-                # Use cv2 library to find the QR code from the picture taken
-                im=cv2.imread('/home/pi/projects/Project1/qr_image.jpg')
-
-                try:
-                    # Decode the found QR code
-                    decodedObject=pyzbar.decode(im)
-                    Question=decodedObject[0].data
-                except:
-                    print("Error, picture taken is not a QR code")  
+                while 1:
+                        try:
+                            # Start of code for QR scanner
+                            # Initialize the camera and have it take a picture
+                            camera=PiCamera()
+                            camera.start_preview()
+                            sleep(5)
+                            camera.capture('/home/pi/projects/Project1/qr_image.jpg')
+                            camera.stop_preview()
+                            camera.close()
+                            # Use cv2 library to find the QR code from the picture taken
+                            im=cv2.imread('/home/pi/projects/Project1/qr_image.jpg')
+                            # Decode the found QR code
+                            decodedObject=pyzbar.decode(im)
+                            Question=decodedObject[0].data
+                            break;
+                        except:
+                            print("Error, picture taken is not a QR code")  
 
 
 		#delete after you get qrcode working		
