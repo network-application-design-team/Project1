@@ -63,7 +63,7 @@ else:
 				break;
 			except:
 				print("["+str(datetime.datetime.now())  + "] [Error, picture taken is not a QR code, Retrying now]")
-                pdb.set_trace() 
+		pdb.set_trace() 
 
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question,'utf-8'))
 		checkpoint += 1
