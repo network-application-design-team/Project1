@@ -12,6 +12,14 @@ import ClientKeys
 from pygame import mixer
 #import netaddr 
 
+# Imports for QR scanner
+from __future__ import print_function
+from picamera import PiCamera
+from time import sleep
+import pyzbar.pyzbar as pyzbar
+import numpy as np
+import cv2
+
 if len(sys.argv) != 7:
 	print("Not enough argument in the commandline")
 	sys.exit[1]
@@ -32,6 +40,23 @@ else:
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
 		checkpoint += 1
 		
+                # Start of code for QR scanner
+                # Initialize the camera and have it take a picture
+                camera=PiCamera()
+                camera.start_preview()
+                sleep(5)
+                camera.capture('/home/pi/projects/Project1/qr_image.jpg')
+                camera.stop_preview()
+                camera.close()
+                # Use cv2 library to find the QR code from the picture taken
+                im=cv2.imread('/home/pi/projects/Project1/qr_image.jpg')
+
+                try:
+                    # Decode the found QR code
+                    decodedObject=pyzbar.decode(im)
+                    Question=decodedObject[0].data
+                except:
+                    print("Error, picture taken is not a QR code")  
 
 
 		#delete after you get qrcode working		
@@ -39,7 +64,7 @@ else:
 		#data = s.recv(size)
 		#s.close()
 		#print ('Received:', data)
-		Question = 'What is today?'
+		#Question = 'What is today?'
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question))
 		checkpoint += 1
 		key = frt.generate_key()

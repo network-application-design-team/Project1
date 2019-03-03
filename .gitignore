@@ -1,5 +1,7 @@
 *.pyc
+*.jpg
 
 __pycache__/ServerKeys.cpython-35.pyc
+
 
 
