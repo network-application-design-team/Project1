@@ -5,6 +5,7 @@ from cryptography.fernet import Fernet
 import ServerKeys 
 import pickle
 import watson_developer_cloud
+import datetime
 
 from pygame import mixer
 import hashlib
@@ -30,16 +31,16 @@ else:
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind((host,port))
 	s.listen(backlog)
-	print("[Checkpoint " + str(checkpoint).zfill(2) + "] Created socket at " + str(host) + " on port " + str(port))
+	print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Created socket at " + str(host) + " on port " + str(port))
 	checkpoint += 1
-	print("[Checkpoint " + str(checkpoint).zfill(2) + "] Listening for client connections")
+	print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Listening for client connections")
 	checkpoint += 1
 	while 1:
 		client, address = s.accept()
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Accepted client connection from  " + str(address) + " on port " + str(port))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Accepted client connection from  " + str(address) + " on port " + str(port))
 		checkpoint += 1
 		data = client.recv(size)
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received data:  " + str(data))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received data:  " + str(data))
 		checkpoint += 1
 		unpickled = pickle.loads(data)
 		key = unpickled[0]
@@ -47,14 +48,14 @@ else:
 		md5hash = unpickled[2]
 		f = Fernet(key)
 		actQuestion = f.decrypt(question)
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
 		checkpoint += 1
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + str(actQuestion))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + str(actQuestion))
 		checkpoint += 1
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + str(actQuestion))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + str(actQuestion))
 		checkpoint += 1
 		response = wolfClient.query(actQuestion)		
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
 		checkpoint += 1
 
 		
@@ -79,14 +80,14 @@ else:
 		newMD5Sum = h.hexdigest()
 		token = (encryptedResponse, newMD5Sum)
 
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
 		checkpoint += 1
 		
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: " + str(newMD5Sum))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: " + str(newMD5Sum))
 		checkpoint += 1
 		
 		pickleAns = pickle.dumps(token)
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: " + pickleAns)
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: " + pickleAns)
 		
 		client.send(pickleAns)
 
