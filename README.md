@@ -10,11 +10,11 @@ The Client is initialized with these parameters.
 
 ## Required Dependencies for Client (Libraries)
 
-..* pygame
-..* socket
-..* pickle
-..* cryptography
-..* hashlib
+1. pygame
+2. socket
+3. pickle
+4. cryptography
+5. hashlib
 
 # Server
 
@@ -28,11 +28,11 @@ The Server is initialized with these parameters
 
 ## Required Dependencies for Server (Libraries)
 
-..* socket
-..* wolframalpha
-..* cryptography
-..* pickle
-..* watson_developer_cloud
-..* pygame
-..* hashlib
-..* datetime
+1. socket
+2. wolframalpha
+3. cryptography
+4. pickle
+5. watson_developer_cloud
+6. pygame
+7. hashlib
+8. datetime
