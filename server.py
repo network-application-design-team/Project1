@@ -4,6 +4,7 @@ import wolframalpha
 from cryptography.fernet import Fernet
 import ServerKeys 
 import pickle
+import watson_developer_cloud
 
 from pygame import mixer
 import hashlib
@@ -21,11 +22,13 @@ else:
 	
 	checkpoint = 1
 	host = fetch_ip()
+	print(host)
+	print(type(host))
 	port = int(sys.argv[2])
 	backlog = 5
 	size = int(sys.argv[4])
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#	s.bind((host,port))
+	s.bind((host,port))
 	s.listen(backlog)
 	print("[Checkpoint " + str(checkpoint).zfill(2) + "] Created socket at " + str(host) + " on port " + str(port))
 	checkpoint += 1
