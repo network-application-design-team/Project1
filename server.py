@@ -4,6 +4,8 @@ import wolframalpha
 from cryptography.fernet import Fernet
 import ServerKeys 
 import pickle
+
+from pygame import mixer
 import hashlib
 
 def fetch_ip():
@@ -39,8 +41,9 @@ else:
 		unpickled = pickle.loads(data)
 		key = unpickled[0]
 		question = unpickled[1]
-		hash = unpickled[2]
-		actQuestion = key.decrypt(question)
+		md5hash = unpickled[2]
+                f = Fernet(key)
+		actQuestion = f.decrypt(question)
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
 		checkpoint += 1
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + str(actQuestion))
@@ -50,15 +53,36 @@ else:
 		response = wolfClient.query(actQuestion)		
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
 		checkpoint += 1
-		token = key.decrypt(response)
-		hash = hashlib.sha1(bytes(response, encoding= 'utf-8'))
+
+		
+	
+
+		encryptedResponse = f.encrypt(response)
+	        text_to_speech = ServerKeys.returnTextToSpeech()
+                with open('Answer.wav', 'wb') as audio_file:
+                    audio_file.write(
+                        text_to_speech.synthesize(
+                            str(response)
+                            'audio/wav'
+                            'en-US_AllisonVoice'
+                        ).get_result().content)
+                
+                mixer.init()
+                mixer.music.load("Answer.wav")
+                mixer.music.play()
+
+                h = hashlib.md5()
+                h.update(encryptedResponse)
+                newMD5Sum = h.hexdigest()
+                token = (encryptedResponse, newMD5Sum)
+
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
 		checkpoint += 1
 		
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: " + str(hash))
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: " + str(newMD5Sum))
 		checkpoint += 1
-		tupAns = (token,hash)
-		pickleAns = pickle.dumps(tupAns)
+		
+		pickleAns = pickle.dumps(token)
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: " + pickleAns)
 		
 		client.send(pickleAns)
