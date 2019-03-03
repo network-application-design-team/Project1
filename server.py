@@ -4,7 +4,7 @@ import wolframalpha
 from cryptography.fernet import Fernet
 import ServerKeys 
 import pickle
-
+import hashlib
 
 def fetch_ip():
       return((([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close())\
@@ -51,14 +51,17 @@ else:
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
 		checkpoint += 1
 		token = key.decrypt(response)
-		
+		hash = hashlib.sha1(bytes(response, encoding= 'utf-8'))
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
 		checkpoint += 1
 		
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: ")
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Generated MD5 Checksum: " + str(hash))
 		checkpoint += 1
-		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: ")
-		if data:
-			client.send(data)
+		tupAns = (token,hash)
+		pickleAns = pickle.dumps(tupAns)
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending answer: " + pickleAns)
+		
+		client.send(pickleAns)
+
 		client.close()
 		
