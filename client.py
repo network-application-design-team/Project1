@@ -19,8 +19,8 @@ else:
 	host = sys.argv[2]
 #	host = '172.30.111.201'		
 #	host = int(netaddr.IPAddress(host))
-	print(host)
-	print(type(host))
+#	print(host)
+#	print(type(host))
 	port = int(sys.argv[4])
 	size = int(sys.argv[6])
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
