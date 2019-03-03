@@ -91,7 +91,7 @@ else:
         	#Recieve Message (pickledAnswer)
 		
 		pickledAnswer = s.recv(size)
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received data: " + str(picledAnswer))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received data: " + str(pickledAnswer))
 		checkpoint += 1
 		encryptedAnswer = pickle.loads(pickledAnswer)
 		answer = f.decrypt(encryptedAnswer[0])
