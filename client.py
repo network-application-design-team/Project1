@@ -3,6 +3,8 @@
 """
 A simple echo client
 """
+from __future__ import print_function
+
 import sys
 import socket
 import pickle
@@ -14,7 +16,7 @@ import datetime
 #import netaddr 
 
 # Imports for QR scanner
-from __future__ import print_function
+
 from picamera import PiCamera
 from time import sleep
 import pyzbar.pyzbar as pyzbar
@@ -41,24 +43,24 @@ else:
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
 		checkpoint += 1
 		
-                while 1:
-                        try:
+		while 1:
+			try:
                             # Start of code for QR scanner
                             # Initialize the camera and have it take a picture
-                            camera=PiCamera()
-                            camera.start_preview()
-                            sleep(5)
-                            camera.capture('/home/pi/projects/Project1/qr_image.jpg')
-                            camera.stop_preview()
-                            camera.close()
+				camera=PiCamera()
+				camera.start_preview()
+				sleep(5)
+				camera.capture('/home/pi/projects/Project1/qr_image.jpg')
+				camera.stop_preview()
+				camera.close()
                             # Use cv2 library to find the QR code from the picture taken
-                            im=cv2.imread('/home/pi/projects/Project1/qr_image.jpg')
+				im=cv2.imread('/home/pi/projects/Project1/qr_image.jpg')
                             # Decode the found QR code
-                            decodedObject=pyzbar.decode(im)
-                            Question=decodedObject[0].data
-                            break;
-                        except:
-                            print("Error, picture taken is not a QR code")  
+				decodedObject=pyzbar.decode(im)
+				Question=decodedObject[0].data
+				break;
+			except:
+				print("Error, picture taken is not a QR code, Retrying now")  
 
 
 		#delete after you get qrcode working		

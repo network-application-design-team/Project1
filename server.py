@@ -48,11 +48,16 @@ else:
 		md5hash = unpickled[2]
 		f = Fernet(key)
 		actQuestion = f.decrypt(question)
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
+
+		actQuestion = str(actQuestion)
+		actQuestion = actQuestion.decode('utf-8')
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + actQuestion)		
 		checkpoint += 1
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + str(actQuestion))
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + actQuestion)
 		checkpoint += 1
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + str(actQuestion))
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + actQuestion)
+
+
 		checkpoint += 1
 		response = wolfClient.query(actQuestion)		
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received question from Wolframalpha " + str(response)) 
