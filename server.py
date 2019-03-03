@@ -42,7 +42,7 @@ else:
 		key = unpickled[0]
 		question = unpickled[1]
 		md5hash = unpickled[2]
-                f = Fernet(key)
+		f = Fernet(key)
 		actQuestion = f.decrypt(question)
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Key: " + str(key) + " | Plain text: " + str(question))		
 		checkpoint += 1
@@ -58,23 +58,23 @@ else:
 	
 
 		encryptedResponse = f.encrypt(response)
-	        text_to_speech = ServerKeys.returnTextToSpeech()
-                with open('Answer.wav', 'wb') as audio_file:
-                    audio_file.write(
-                        text_to_speech.synthesize(
-                            str(response)
-                            'audio/wav'
-                            'en-US_AllisonVoice'
-                        ).get_result().content)
+		text_to_speech = ServerKeys.returnTextToSpeech()
+		with open('Answer.wav', 'wb') as audio_file:
+			audio_file.write(
+				text_to_speech.synthesize(
+					str(response),
+					'audio/wav',
+					'en-US_AllisonVoice'
+				).get_result().content)
                 
-                mixer.init()
-                mixer.music.load("Answer.wav")
-                mixer.music.play()
-
-                h = hashlib.md5()
-                h.update(encryptedResponse)
-                newMD5Sum = h.hexdigest()
-                token = (encryptedResponse, newMD5Sum)
+		mixer.init()
+		mixer.music.load("Answer.wav")
+		mixer.music.play()
+		
+		h = hashlib.md5()
+		h.update(encryptedResponse)
+		newMD5Sum = h.hexdigest()
+		token = (encryptedResponse, newMD5Sum)
 
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Key: " + key + " | Ciphertext: " + token)
 		checkpoint += 1
