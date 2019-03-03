@@ -50,7 +50,7 @@ else:
                             # Initialize the camera and have it take a picture
 				camera=PiCamera()
 				camera.start_preview()
-				sleep(5)
+				sleep(2)
 				camera.capture('/home/pi/projects/Project1/qr_image.jpg')
 				camera.stop_preview()
 				camera.close()
@@ -61,8 +61,8 @@ else:
 				Question=decodedObject[0].data
 				break;
 			except:
-				print("Error, picture taken is not a QR code, Retrying now")
-				Question = 'What is today?'
+				print("["+str(datetime.now())  + "] [Error, picture taken is not a QR code, Retrying now]")
+				Question = 'What is the meaning of life?'
 				break;
         
 
