@@ -1,5 +1,5 @@
 import wolframalpha
-import watson_developer_cloud import TextToSpeechV1
+from watson_developer_cloud import TextToSpeechV1
 
 def returnAPI():
 	client = wolframalpha.Client('E4AJTP-KVK8TU6UPG')
