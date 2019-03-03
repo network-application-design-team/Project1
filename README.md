@@ -15,6 +15,13 @@ The Client is initialized with these parameters.
 3. pickle
 4. cryptography
 5. hashlib
+6. picamera
+7. __future__
+8. time
+9. numpy
+10. cv2
+11. pyzbar.pzbar
+12. watson_developer_cloud
 
 # Server
 
