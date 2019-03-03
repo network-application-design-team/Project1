@@ -29,37 +29,50 @@ else:
 		
 
 
-		break #delete after you get qrcode working		
+		#delete after you get qrcode working		
 		#s.send()
 		#data = s.recv(size)
 		#s.close()
 		#print ('Received:', data)
-        Question = b'Some Question'
-        key = frt.generate_key()
-        f = frt(key)
-        cipher = f.encrypt(Question)
-        m = hashlib.md5()
-        m.update(cipher)
-        md5Sum = m.hexdigest()
-        message = (key, cipher, md5Sum)
-        pickledMessage = pickle.dumps(message)
-        #Send Message
-        #Recieve Message (pickledAnswer)
-        pickledAnswer = b'Some Answer'
-        encryptedAnswer = pickle.loads(pickledAnswer)
-        answer = f.decrypt(encryptedAnswer[0])
-        
+       		Question = b'What is today?'
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question))
+       		checkpoint += 1
+		key = frt.generate_key()
+       		f = frt(key)
+        	cipher = f.encrypt(Question)
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Encrypt: Generated Keys: " + str(key) " | Cipher text: " + str(cipher))
+        	checkpoint += 1
 
-        text_to_speech = ClientKeys.returnTextToSpeech()
-        with open('Answer.wav', 'wb') as audio_file:
-            audio_file.write(
-                text_to_speech.synthesize(
-                    str(answer),
-                    'audio/wav',
-                    'en-US_AllisonVoice'
-                ).get_result().content)
+		m = hashlib.md5()
+        	m.update(cipher)
+        	md5Sum = m.hexdigest()
+        	message = (key, cipher, md5Sum)
+		
+        	pickledMessage = pickle.dumps(message)
+        	print("[Checkpoint " + str(checkpoint).zfill(2) + "] Sending data: " + str(pickledMessage))
+		checkpoint += 1
+		#Send Message
+        	#Recieve Message (pickledAnswer)
+		
+        	pickledAnswer = s.recv(size)
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Received data: " + str(picledAnswer))
+		checkpoint += 1
+        	encryptedAnswer = pickle.loads(pickledAnswer)
+        	answer = f.decrypt(encryptedAnswer[0])
+        	print("[Checkpoint " + str(checkpoint).zfill(2) + "] Decrypt: Using Key: " + str(key) + " | Plain text: " + str(answer))
+		checkpoint += 1
+		print("[Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Answer: " + str(answer))
+		checkpoint += 1
+        	text_to_speech = ClientKeys.returnTextToSpeech()
+        	with open('Answer.wav', 'wb') as audio_file:
+            		audio_file.write(
+                		text_to_speech.synthesize(
+                    			str(answer),
+                    			'audio/wav',
+                    			'en-US_AllisonVoice'
+                		).get_result().content)
         
-        mixer.init()
-        mixer.music.load("Answer.wav")
-        mixer.music.play()
+        	mixer.init()
+        	mixer.music.load("Answer.wav")
+        	mixer.music.play()
 
