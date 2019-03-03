@@ -57,6 +57,22 @@ else:
 		checkpoint += 1
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Speaking Question: " + strQuestion)
 		checkpoint += 1
+
+		text_to_speech = ServerKeys.returnTextToSpeech()
+		with open('Question.mp3', 'wb') as audio_file:
+			audio_file.write(
+				text_to_speech.synthesize(
+					str(strQuestion),
+					'audio/mp3',
+					'en-US_AllisonVoice'
+				).get_result().content)
+                
+		mixer.init()
+		mixer.music.load("Question.mp3")
+		mixer.music.play()
+	
+		while mixer.music.get_busy():
+			time.sleep(1)
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Sending question to Wolframalpha " + strQuestion)
 
 		checkpoint += 1
@@ -71,21 +87,6 @@ else:
 	
 
 		encryptedResponse = f.encrypt(response)
-		text_to_speech = ServerKeys.returnTextToSpeech()
-		with open('Answer.mp3', 'wb') as audio_file:
-			audio_file.write(
-				text_to_speech.synthesize(
-					str(response),
-					'audio/mp3',
-					'en-US_AllisonVoice'
-				).get_result().content)
-                
-		mixer.init()
-		mixer.music.load("Answer.mp3")
-		mixer.music.play()
-	
-		while mixer.music.get_busy():
-			time.sleep(1)
 		h = hashlib.md5()
 		h.update(encryptedResponse)
 		newMD5Sum = h.hexdigest()
