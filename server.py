@@ -22,8 +22,8 @@ else:
 	
 	checkpoint = 1
 	host = fetch_ip()
-	print(host)
-	print(type(host))
+#	print(host)
+#	print(type(host))
 	port = int(sys.argv[2])
 	backlog = 5
 	size = int(sys.argv[4])
