@@ -39,7 +39,7 @@ else:
 		#data = s.recv(size)
 		#s.close()
 		#print ('Received:', data)
-		Question = b'What is today?'
+		Question = 'What is today?'
 		print("[Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question))
 		checkpoint += 1
 		key = frt.generate_key()
