@@ -24,20 +24,19 @@ import datetime
 #import netaddr 
 
 
-try:
-	if len(sys.argv) != 7:
-		print("Not enough argument in the commandline")
-		sys.exit[1]
-	else:
-		host = sys.argv[2]
+if len(sys.argv) != 7:
+	print("Not enough argument in the commandline")
+	sys.exit[1]
+else:
+	host = sys.argv[2]
 #	host = '172.30.111.201'		
 #	host = int(netaddr.IPAddress(host))
 #	print(host)
 #	print(type(host))
-		port = int(sys.argv[4])
-		size = int(sys.argv[6])
+	port = int(sys.argv[4])
+	size = int(sys.argv[6])
 
-
+	try:
 		while 1:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			s.connect((host,port))
@@ -112,6 +111,6 @@ try:
 			while mixer.music.get_busy():
 				sleep(1)
 			s.close()
-except:
-	s.close()
-	sys.exit[1]
+	except:
+		s.close()
+		sys.exit[1]
