@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 
 # Imports for rest of client
-import signal
+
 import sys
 import socket
 import pickle
@@ -21,10 +21,7 @@ import hashlib
 import ClientKeys
 from pygame import mixer
 import datetime
-#import netaddr 
-
-def signal_handler(sig, frame):
-    sys.exit(0)
+#import neta
     
 
 
@@ -53,7 +50,7 @@ else:
 		checkpoint += 1
 		
 		while 1:
-			signal.signal(signal.SIGINT, signal_handler)
+	
 			try:
                             # Start of code for QR scanner
                             # Initialize the camera and have it take a picture
@@ -71,7 +68,7 @@ else:
 				break;
 			except:
 				print("["+str(datetime.datetime.now())  + "] [Error, picture taken is not a QR code, Retrying now]")
-                                sleep(1) 
+				sleep(1) 
 
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] New Question: " + str(Question,'utf-8'))
 		checkpoint += 1
