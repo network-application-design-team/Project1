@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 
 # Imports for rest of client
-
+import signal
 import sys
 import socket
 import pickle
@@ -22,6 +22,10 @@ import ClientKeys
 from pygame import mixer
 import datetime
 #import netaddr 
+
+def signal_handler(sig, frame):
+    sys.exit(0)
+    
 
 
 if len(sys.argv) != 7:
@@ -38,6 +42,7 @@ else:
 
 
 	while 1:
+            signal.signal(signal.SIGINT, signal_handler)
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect((host,port))
 		checkpoint = 1
