@@ -1,3 +1,4 @@
+import pdb
 import socket
 import sys
 import wolframalpha
@@ -38,6 +39,7 @@ else:
 	print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Listening for client connections")
 	checkpoint += 1
 	while 1:
+		pdb.set_trace()
 		client, address = s.accept()
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Accepted client connection from  " + str(address) + " on port " + str(port))
 		checkpoint += 1
