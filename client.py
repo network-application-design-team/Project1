@@ -37,11 +37,12 @@ else:
 	port = int(sys.argv[4])
 	size = int(sys.argv[6])
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.connect((host,port))
+	checkpoint = 1
+	print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Connection to " + str(host) + " on port " + str(port))
+	checkpoint += 1
 	while 1:
-		s.connect((host,port))
-		checkpoint = 1
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Connection to " + str(host) + " on port " + str(port)) 
-		checkpoint += 1
+
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Listening for QR codes from RPi Camera that contain questions")
 		checkpoint += 1
 		
