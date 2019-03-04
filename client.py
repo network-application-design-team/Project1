@@ -42,7 +42,7 @@ else:
 
 
 	while 1:
-            signal.signal(signal.SIGINT, signal_handler)
+
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect((host,port))
 		checkpoint = 1
@@ -53,6 +53,7 @@ else:
 		checkpoint += 1
 		
 		while 1:
+			signal.signal(signal.SIGINT, signal_handler)
 			try:
                             # Start of code for QR scanner
                             # Initialize the camera and have it take a picture
@@ -69,6 +70,7 @@ else:
 				Question=decodedObject[0].data
 				break;
 			except:
+
 				print("["+str(datetime.datetime.now())  + "] [Error, picture taken is not a QR code, Retrying now]")
  
 
