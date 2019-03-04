@@ -41,7 +41,7 @@ else:
 	while 1:
 
 		client, address = s.accept()
-		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Accepted client connection from  " + str(address[1]) + " on port " + str(port))
+		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Accepted client connection from  " + str(address[0]) + " on port " + str(port))
 		checkpoint += 1
 		data = client.recv(size)
 		print("[" + str(datetime.datetime.now())  + "] [Checkpoint " + str(checkpoint).zfill(2) + "] Received data:  " + str(data))
